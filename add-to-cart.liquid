@@ -1,0 +1,33 @@
+{% comment %}
+  Simple full-width Add to Cart button under each grid item
+  Accepts:
+    • product {product}
+    • class_name {string}
+{% endcomment %}
+
+{%- liquid
+  assign class_name = class_name | default: '' | strip
+  assign variant    = product.selected_or_first_available_variant
+-%}
+
+<form method="post" action="/cart/add" class="simple-add-to-cart {{ class_name }}">
+  <input type="hidden" name="id" value="{{ variant.id }}" />
+
+  {% if product.available %}
+    <button
+      type="submit"
+      class="btn btn--primary simple-add-to-cart__button"
+      aria-label="{{ 'actions.add_to_cart' | t }} {{ product.title }}"
+    >
+      {{ 'actions.add_to_cart' | t }}
+    </button>
+  {% else %}
+    <button
+      type="button"
+      class="btn btn--secondary simple-add-to-cart__button simple-add-to-cart__button--sold-out"
+      disabled
+    >
+      {{ 'info.sold_out' | t }}
+    </button>
+  {% endif %}
+</form>
